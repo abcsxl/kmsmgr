@@ -1,16 +1,17 @@
+using kmsmgr.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kmsmgr.Models
-{ 
-    public partial class Permission
+{
+    public class Permission
     {
         public Permission()
         {
             this.IsEnable = true;
-            this.RolePermissions = new HashSet<RolePermission>();
+            // this.RolePermissions = new HashSet<RolePermission>();
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace kmsmgr.Models
         /// <summary>
         /// 上级权限ID
         /// </summary>
-        public Guid? ParentPermissionId { get; set; }
+        public Guid? ParentId { get; set; }
         /// <summary>
         /// 备注
         /// </summary>
@@ -53,10 +54,11 @@ namespace kmsmgr.Models
         /// </summary>
         public bool IsEnable { get; set; }
 
-        /// <summary>
-        /// 上级权限信息
-        /// </summary>
-        public virtual Permission ParentPermission { get; set; }
+        // /// <summary>
+        // /// 上级权限信息
+        // /// </summary>
+        // public virtual Permission ParentPermission { get; set; }
+
         /// <summary>
         /// 具备本权限的所有角色列表
         /// </summary>

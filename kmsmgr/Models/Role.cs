@@ -1,3 +1,4 @@
+using kmsmgr.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -42,12 +43,12 @@ namespace kmsmgr.Models
         /// 是否启用
         /// </summary>
         public bool IsEnable { get; set; }
-        
-        /// <summary>
-        /// 创建人信息
-        /// </summary>
-        public virtual User CreateUser { get; set; }
-        /// <summary>
+
+        // /// <summary>
+        // /// 创建人信息
+        // /// </summary>
+        // public virtual User CreateUser { get; set; }
+        // /// <summary>
         /// 本角色具备的所有权限列表
         /// </summary>
         public virtual ICollection<RolePermission> RolePermissions { get; set; }

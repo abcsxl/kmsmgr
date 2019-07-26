@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kmsmgr.Models
 {
-    public partial class Department
+    public class Department
     {
         public Department()
         {
@@ -47,7 +47,7 @@ namespace kmsmgr.Models
         /// <summary>
         /// 上级部门ID
         /// </summary>
-        public Guid? ParentDepartmentId { get; set; }
+        public Guid? ParentId { get; set; }
         /// <summary>
         /// 备注
         /// </summary>
@@ -57,15 +57,15 @@ namespace kmsmgr.Models
         /// </summary>
         public bool IsEnable { get; set; }
 
-        /// <summary>
-        /// 创建人信息
-        /// </summary>
-        public virtual User CreateUser { get; set; }
-        /// <summary>
-        /// 上级部门信息
-        /// </summary>
-        public virtual Department ParentDepartment { get; set; }
-        /// <summary>
+        // /// <summary>
+        // /// 创建人信息
+        // /// </summary>
+        // public virtual User CreateUser { get; set; }
+        // /// <summary>
+        // /// 上级部门信息
+        // /// </summary>
+        // public virtual Department Parent { get; set; }
+        // /// <summary>
         /// 本部门的所有用户列表
         /// </summary>
         public virtual ICollection<User> Users { get; set; }

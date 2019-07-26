@@ -31,12 +31,7 @@ namespace kmsmgr.Data
         public DbSet<Department> Departments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // 部门和用户的一对多关系
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Department)
-                .WithMany(d => d.Users);
-
+        {         
             // 角色和权限的多对多关系
             modelBuilder.Entity<RolePermission>()
                 .HasKey(rp => new { rp.RoleId, rp.PermissionId });
@@ -66,22 +61,22 @@ namespace kmsmgr.Data
                 .HasIndex(u => u.UserName)
                 .IsUnique(true);
 
-            //modelBuilder.Entity<Permission>()
-            //    .Property(p => p.Sort)
-            //    .ValueGeneratedOnAdd();
+            // 填充默认记录
+            Guid rootDeptId = Guid.NewGuid();
+            modelBuilder.Entity<Department>().HasData(
+               new Department { Id = rootDeptId, Name = "全国密钥管理中心", Code = "root", ParentId = Guid.Empty, CreateTime = DateTime.Now }
+               );
 
-            //// 填充默认记录
-            //modelBuilder.Entity<User>().HasData(
-            //    new User { Id = Guid.NewGuid(), UserName = "admin", Password = "123456", Name = "超级管理员", CreateTime = DateTime.Now, EMail = "admin@admin.com", MobileNumber = "11011112222", CreateUserId = Guid.Empty, DepartmentId = Guid.Empty, LoginCount = 0, IsEnable = true }
-            //    );
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = Guid.NewGuid(), UserName = "admin", Password = "123456", Name = "超级管理员", CreateTime = DateTime.Now, EMail = "admin@admin.com", MobileNumber = "11011112222", CreateUserId = Guid.Empty, DepartmentId = rootDeptId, LoginCount = 0, IsEnable = true }
+                );
 
-            //modelBuilder.Entity<Permission>().HasData(
-            //    new Permission { Id = Guid.NewGuid(), Sort = 1, Name = "机构管理", Code = "Department", ParentPermissionId = Guid.Empty, Icon = "fa fa-link" },
-            //    new Permission { Id = Guid.NewGuid(), Sort = 2, Name = "角色管理", Code = "Role", ParentPermissionId = Guid.Empty, Icon = "fa fa-link" },
-            //    new Permission { Id = Guid.NewGuid(), Sort = 3, Name = "用户管理", Code = "User", ParentPermissionId = Guid.Empty, Icon = "fa fa-link" },
-            //    new Permission { Id = Guid.NewGuid(), Sort = 4, Name = "功能管理", Code = "Permission", ParentPermissionId = Guid.Empty, Icon = "fa fa-link" }
-            //    );
-
+            modelBuilder.Entity<Permission>().HasData(
+                new Permission { Id = Guid.NewGuid(), Sort = 1, Name = "机构管理", Code = "Department", ParentId = Guid.Empty, Icon = "fa fa-link" },
+                new Permission { Id = Guid.NewGuid(), Sort = 2, Name = "角色管理", Code = "Role", ParentId = Guid.Empty, Icon = "fa fa-link" },
+                new Permission { Id = Guid.NewGuid(), Sort = 3, Name = "用户管理", Code = "User", ParentId = Guid.Empty, Icon = "fa fa-link" },
+                new Permission { Id = Guid.NewGuid(), Sort = 4, Name = "功能管理", Code = "Permission", ParentId = Guid.Empty, Icon = "fa fa-link" }
+                );
 
             base.OnModelCreating(modelBuilder);
         }

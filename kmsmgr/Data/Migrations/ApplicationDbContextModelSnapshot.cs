@@ -38,17 +38,24 @@ namespace kmsmgr.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<Guid?>("ParentDepartmentId");
+                    b.Property<Guid?>("ParentId");
 
                     b.Property<string>("Remarks");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreateUserId");
-
-                    b.HasIndex("ParentDepartmentId");
-
                     b.ToTable("Departments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("534eec64-c8e3-4748-8353-1abe6ed5ad2b"),
+                            Code = "root",
+                            CreateTime = new DateTime(2019, 7, 26, 13, 47, 32, 214, DateTimeKind.Local).AddTicks(4718),
+                            IsEnable = true,
+                            Name = "全国密钥管理中心",
+                            ParentId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
                 });
 
             modelBuilder.Entity("kmsmgr.Models.Permission", b =>
@@ -66,7 +73,7 @@ namespace kmsmgr.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<Guid?>("ParentPermissionId");
+                    b.Property<Guid?>("ParentId");
 
                     b.Property<string>("Remarks");
 
@@ -77,9 +84,49 @@ namespace kmsmgr.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentPermissionId");
-
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("91ebc230-277f-4666-ad1f-daf4bdaad9b4"),
+                            Code = "Department",
+                            Icon = "fa fa-link",
+                            IsEnable = true,
+                            Name = "机构管理",
+                            ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Sort = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5a52c006-6f34-4787-9598-0409282cfeee"),
+                            Code = "Role",
+                            Icon = "fa fa-link",
+                            IsEnable = true,
+                            Name = "角色管理",
+                            ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Sort = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("e7f397a2-d387-4325-ae20-ef616f4929d5"),
+                            Code = "User",
+                            Icon = "fa fa-link",
+                            IsEnable = true,
+                            Name = "用户管理",
+                            ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Sort = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("8fcdec2b-d6b9-43e5-9523-8f62779e42fd"),
+                            Code = "Permission",
+                            Icon = "fa fa-link",
+                            IsEnable = true,
+                            Name = "功能管理",
+                            ParentId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Sort = 4
+                        });
                 });
 
             modelBuilder.Entity("kmsmgr.Models.Role", b =>
@@ -101,8 +148,6 @@ namespace kmsmgr.Data.Migrations
                     b.Property<string>("Remarks");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreateUserId");
 
                     b.ToTable("Roles");
                 });
@@ -157,14 +202,28 @@ namespace kmsmgr.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreateUserId");
-
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("UserName")
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c6d4f6ce-67af-47fa-a96c-85b842eb5349"),
+                            CreateTime = new DateTime(2019, 7, 26, 13, 47, 32, 217, DateTimeKind.Local).AddTicks(3560),
+                            CreateUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            DepartmentId = new Guid("534eec64-c8e3-4748-8353-1abe6ed5ad2b"),
+                            EMail = "admin@admin.com",
+                            IsEnable = true,
+                            LoginCount = 0,
+                            MobileNumber = "11011112222",
+                            Name = "超级管理员",
+                            Password = "123456",
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("kmsmgr.Models.UserRole", b =>
@@ -178,31 +237,6 @@ namespace kmsmgr.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole");
-                });
-
-            modelBuilder.Entity("kmsmgr.Models.Department", b =>
-                {
-                    b.HasOne("kmsmgr.Models.User", "CreateUser")
-                        .WithMany()
-                        .HasForeignKey("CreateUserId");
-
-                    b.HasOne("kmsmgr.Models.Department", "ParentDepartment")
-                        .WithMany()
-                        .HasForeignKey("ParentDepartmentId");
-                });
-
-            modelBuilder.Entity("kmsmgr.Models.Permission", b =>
-                {
-                    b.HasOne("kmsmgr.Models.Permission", "ParentPermission")
-                        .WithMany()
-                        .HasForeignKey("ParentPermissionId");
-                });
-
-            modelBuilder.Entity("kmsmgr.Models.Role", b =>
-                {
-                    b.HasOne("kmsmgr.Models.User", "CreateUser")
-                        .WithMany()
-                        .HasForeignKey("CreateUserId");
                 });
 
             modelBuilder.Entity("kmsmgr.Models.RolePermission", b =>
@@ -220,10 +254,6 @@ namespace kmsmgr.Data.Migrations
 
             modelBuilder.Entity("kmsmgr.Models.User", b =>
                 {
-                    b.HasOne("kmsmgr.Models.User", "CreateUser")
-                        .WithMany()
-                        .HasForeignKey("CreateUserId");
-
                     b.HasOne("kmsmgr.Models.Department", "Department")
                         .WithMany("Users")
                         .HasForeignKey("DepartmentId");

@@ -8,6 +8,26 @@ namespace kmsmgr.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Code = table.Column<string>(nullable: false),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    Manager = table.Column<string>(nullable: true),
+                    ContactNumber = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<Guid>(nullable: true),
+                    ParentId = table.Column<Guid>(nullable: true),
+                    Remarks = table.Column<string>(nullable: true),
+                    IsEnable = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Permissions",
                 columns: table => new
                 {
@@ -18,19 +38,30 @@ namespace kmsmgr.Data.Migrations
                     Code = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(nullable: true),
-                    ParentPermissionId = table.Column<Guid>(nullable: true),
+                    ParentId = table.Column<Guid>(nullable: true),
                     Remarks = table.Column<string>(nullable: true),
                     IsEnable = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Permissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Permissions_Permissions_ParentPermissionId",
-                        column: x => x.ParentPermissionId,
-                        principalTable: "Permissions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<Guid>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true),
+                    IsEnable = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,64 +87,9 @@ namespace kmsmgr.Data.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Users_CreateUserId",
-                        column: x => x.CreateUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Code = table.Column<string>(nullable: false),
-                    CreateTime = table.Column<DateTime>(nullable: false),
-                    Manager = table.Column<string>(nullable: true),
-                    ContactNumber = table.Column<string>(nullable: true),
-                    CreateUserId = table.Column<Guid>(nullable: true),
-                    ParentDepartmentId = table.Column<Guid>(nullable: true),
-                    Remarks = table.Column<string>(nullable: true),
-                    IsEnable = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Departments_Users_CreateUserId",
-                        column: x => x.CreateUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Departments_Departments_ParentDepartmentId",
-                        column: x => x.ParentDepartmentId,
+                        name: "FK_Users_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
                         principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Code = table.Column<string>(nullable: true),
-                    CreateUserId = table.Column<Guid>(nullable: true),
-                    CreateTime = table.Column<DateTime>(nullable: false),
-                    Remarks = table.Column<string>(nullable: true),
-                    IsEnable = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Roles_Users_CreateUserId",
-                        column: x => x.CreateUserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -166,20 +142,35 @@ namespace kmsmgr.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Departments_CreateUserId",
+            migrationBuilder.InsertData(
                 table: "Departments",
-                column: "CreateUserId");
+                columns: new[] { "Id", "Code", "ContactNumber", "CreateTime", "CreateUserId", "IsEnable", "Manager", "Name", "ParentId", "Remarks" },
+                values: new object[] { new Guid("534eec64-c8e3-4748-8353-1abe6ed5ad2b"), "root", null, new DateTime(2019, 7, 26, 13, 47, 32, 214, DateTimeKind.Local).AddTicks(4718), null, true, null, "全国密钥管理中心", new Guid("00000000-0000-0000-0000-000000000000"), null });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Departments_ParentDepartmentId",
-                table: "Departments",
-                column: "ParentDepartmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Permissions_ParentPermissionId",
+            migrationBuilder.InsertData(
                 table: "Permissions",
-                column: "ParentPermissionId");
+                columns: new[] { "Id", "Code", "Icon", "IsEnable", "Name", "ParentId", "Remarks", "Sort", "Url" },
+                values: new object[] { new Guid("91ebc230-277f-4666-ad1f-daf4bdaad9b4"), "Department", "fa fa-link", true, "机构管理", new Guid("00000000-0000-0000-0000-000000000000"), null, 1, null });
+
+            migrationBuilder.InsertData(
+                table: "Permissions",
+                columns: new[] { "Id", "Code", "Icon", "IsEnable", "Name", "ParentId", "Remarks", "Sort", "Url" },
+                values: new object[] { new Guid("5a52c006-6f34-4787-9598-0409282cfeee"), "Role", "fa fa-link", true, "角色管理", new Guid("00000000-0000-0000-0000-000000000000"), null, 2, null });
+
+            migrationBuilder.InsertData(
+                table: "Permissions",
+                columns: new[] { "Id", "Code", "Icon", "IsEnable", "Name", "ParentId", "Remarks", "Sort", "Url" },
+                values: new object[] { new Guid("e7f397a2-d387-4325-ae20-ef616f4929d5"), "User", "fa fa-link", true, "用户管理", new Guid("00000000-0000-0000-0000-000000000000"), null, 3, null });
+
+            migrationBuilder.InsertData(
+                table: "Permissions",
+                columns: new[] { "Id", "Code", "Icon", "IsEnable", "Name", "ParentId", "Remarks", "Sort", "Url" },
+                values: new object[] { new Guid("8fcdec2b-d6b9-43e5-9523-8f62779e42fd"), "Permission", "fa fa-link", true, "功能管理", new Guid("00000000-0000-0000-0000-000000000000"), null, 4, null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreateTime", "CreateUserId", "DepartmentId", "EMail", "IsEnable", "LastLoginIP", "LoginCount", "MobileNumber", "Name", "Password", "Remarks", "UserName" },
+                values: new object[] { new Guid("c6d4f6ce-67af-47fa-a96c-85b842eb5349"), new DateTime(2019, 7, 26, 13, 47, 32, 217, DateTimeKind.Local).AddTicks(3560), new Guid("00000000-0000-0000-0000-000000000000"), new Guid("534eec64-c8e3-4748-8353-1abe6ed5ad2b"), "admin@admin.com", true, null, 0, "11011112222", "超级管理员", "123456", null, "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolePermission_PermissionId",
@@ -187,19 +178,9 @@ namespace kmsmgr.Data.Migrations
                 column: "PermissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_CreateUserId",
-                table: "Roles",
-                column: "CreateUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_CreateUserId",
-                table: "Users",
-                column: "CreateUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_DepartmentId",
@@ -211,22 +192,10 @@ namespace kmsmgr.Data.Migrations
                 table: "Users",
                 column: "UserName",
                 unique: true);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_Departments_DepartmentId",
-                table: "Users",
-                column: "DepartmentId",
-                principalTable: "Departments",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Departments_Users_CreateUserId",
-                table: "Departments");
-
             migrationBuilder.DropTable(
                 name: "RolePermission");
 

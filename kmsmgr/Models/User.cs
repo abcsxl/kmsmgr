@@ -1,3 +1,4 @@
+using kmsmgr.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -5,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kmsmgr.Models
 {
-    public partial class User
+    public class User
     {
         public User()
         {
@@ -43,7 +44,7 @@ namespace kmsmgr.Models
         /// <summary>
         /// 手机号码
         /// </summary>
-        public string MobileNumber { get; set; }       
+        public string MobileNumber { get; set; }
         /// <summary>
         /// 创建人Id
         /// </summary>
@@ -74,10 +75,10 @@ namespace kmsmgr.Models
         /// </summary>
         public bool IsEnable { get; set; }
 
-        /// <summary>
-        /// 创建人信息
-        /// </summary>
-        public virtual User CreateUser { get; set; }
+        // /// <summary>
+        // /// 创建人信息
+        // /// </summary>
+        // public virtual User CreateUser { get; set; }
         /// <summary>
         /// 所属部门信息
         /// </summary>

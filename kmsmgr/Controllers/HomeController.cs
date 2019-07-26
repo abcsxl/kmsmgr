@@ -10,8 +10,16 @@ namespace kmsmgr.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly Data.ApplicationDbContext _context;
+
+        public HomeController(Data.ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
+            ViewBag.Menus = _context.Permissions;
             return View();
         }
 
